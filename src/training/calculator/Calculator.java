@@ -3,54 +3,45 @@ package training.calculator;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public class Calculator {
     public static void main(String[] args) throws IOException {
         System.out.println("Enter an expression: ");
-
-        String line = new BufferedReader(new InputStreamReader(System.in)).readLine();
-        System.out.println(line);
-
-        String[] operations = line.split("[0-9]+");
-        System.out.println(Arrays.toString(operations));
-        String[] numbers = line.split("[" + Pattern.quote("+-*/") + "]");
-        System.out.println(Arrays.toString(numbers));
-
-        int[] numbersConverted = convert(numbers);
-        System.out.println(Arrays.toString(numbersConverted));
-
-        int result = calculate(operations, numbersConverted);
-        System.out.println(result);
+        String input = new BufferedReader(new InputStreamReader(System.in)).readLine();
+        System.out.println(calculate(input));
     }
 
-    private static int[] convert(String[] numbers) {
+    private static int[] convertToInt(String input) {
+        String[] numbers = input.split("[" + Pattern.quote("+-*/") + "]");
         int[] numbersConverted = new int[numbers.length];
         for (int i = 0; i < numbers.length; i++) {
-            numbersConverted[i] = Integer.valueOf(numbers[i]);
+            numbersConverted[i] = Integer.parseInt(numbers[i]);
         }
         return numbersConverted;
     }
 
-    private static int calculate(String[] operations, int[] numbers) {
+    private static int checkNext(int index, int length, int[] numbers, String[] operations) {
+        for (int j = index; j < length - 1; j++) {
+            numbers[j] = numbers[j + 1];
+            operations[j] = operations[j + 1];
+        }
+        return length - 1;
+    }
+
+    private static int calculate(String input) {
+        String[] operations = input.split("[0-9]+");
+        int[] numbers = convertToInt(input);
         int length = operations.length;
         int index = 1;
+
         while (index < length) {
             if ("*".equals(operations[index])) { // NEM!!! "*" == operations[i]
-                numbers[index - 1] = numbers[index - 1] * numbers[index];
-                for (int j = index; j < length - 1; j++) {
-                    numbers[j] = numbers[j + 1];
-                    operations[j] = operations[j + 1];
-                }
-                length--;
+                numbers[index - 1] *= numbers[index];
+                length = checkNext(index, length, numbers, operations);
             } else if ("/".equals(operations[index])) { // NEM!!! "/" == operations[i]
-                numbers[index - 1] = numbers[index - 1] / numbers[index];
-                for (int j = index; j < length - 1; j++) {
-                    numbers[j] = numbers[j + 1];
-                    operations[j] = operations[j + 1];
-                }
-                length--;
+                numbers[index - 1] /= numbers[index];
+                length = checkNext(index, length, numbers, operations);
             } else {
                 index++;
             }
@@ -58,19 +49,11 @@ public class Calculator {
         index = 1;
         while (index < length) {
             if ("+".equals(operations[index])) { // NEM!!! "+" == operations[i]
-                numbers[index - 1] = numbers[index - 1] + numbers[index];
-                for (int j = index; j < length - 1; j++) {
-                    numbers[j] = numbers[j + 1];
-                    operations[j] = operations[j + 1];
-                }
-                length--;
+                numbers[index - 1] += numbers[index];
+                length = checkNext(index, length, numbers, operations);
             } else if ("-".equals(operations[index])) { // NEM!!! "-" == operations[i]
-                numbers[index - 1] = numbers[index - 1] - numbers[index];
-                for (int j = index; j < length - 1; j++) {
-                    numbers[j] = numbers[j + 1];
-                    operations[j] = operations[j + 1];
-                }
-                length--;
+                numbers[index - 1] -= numbers[index];
+                length = checkNext(index, length, numbers, operations);
             } else {
                 index++;
             }
