@@ -1,4 +1,4 @@
-package training.calculator;
+package org.training.calculator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,3 +61,4 @@ public class Calculator {
         return numbers[0];
     }
 }
+
