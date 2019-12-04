@@ -24,3 +24,11 @@
 *.iws
 *.iml
 *.ipr
+
+calculator/src/main/resources/
+calculator/src/test/
+calculator/target/generated-sources/
+calculator/target/generated-test-sources/
+calculator/target/maven-archiver/
+calculator/target/maven-status/
+calculator/target/test-classes/
