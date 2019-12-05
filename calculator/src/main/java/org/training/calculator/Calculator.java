@@ -5,7 +5,8 @@ import java.io.IOException;
 public class Calculator {
     public static void main(String[] args) throws IOException {
         Ui ui = new Ui();
-        ui.init();
+        Calculate calculate = new MathOperations();
+        ui.init(calculate);
     }
 }
 

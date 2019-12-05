@@ -1,12 +1,11 @@
 package org.training.calculator;
 
-import java.util.regex.Pattern;
+public class MathOperations implements Calculate {
 
-public class MathOperations {
-
-    public static int calculate(String input) {
+    public String calculate(String input) {
         String[] operations = input.split("[0-9]+");
-        int[] numbers = convertToInt(input);
+        Convector convector = new TextToIntConvector();
+        int[] numbers = convector.convert(input);
         int length = operations.length;
         int index = 1;
 
@@ -33,16 +32,7 @@ public class MathOperations {
                 index++;
             }
         }
-        return numbers[0];
-    }
-
-    private static int[] convertToInt(String input) {
-        String[] numbers = input.split("[" + Pattern.quote("+-*/") + "]");
-        int[] numbersConverted = new int[numbers.length];
-        for (int i = 0; i < numbers.length; i++) {
-            numbersConverted[i] = Integer.parseInt(numbers[i]);
-        }
-        return numbersConverted;
+        return String.valueOf(numbers[0]);
     }
 
     private static int checkNext(int index, int length, int[] numbers, String[] operations) {

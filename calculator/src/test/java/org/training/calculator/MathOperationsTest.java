@@ -7,6 +7,7 @@ import org.junit.Test;
 public class MathOperationsTest {
     String littleEquation;
     String bigEquation;
+    MathOperations mathOperations = new MathOperations();
 
     @Before
     public void setUp(){
@@ -16,7 +17,7 @@ public class MathOperationsTest {
 
     @Test
     public void calculate() {
-        Assert.assertEquals(littleEquation + " Must be equal 6", 6, MathOperations.calculate(littleEquation));
-        Assert.assertEquals(bigEquation + " Must be equal 10", 10, MathOperations.calculate(bigEquation));
+        Assert.assertEquals(littleEquation + " Must be equal 6", "6", mathOperations.calculate(littleEquation));
+        Assert.assertEquals(bigEquation + " Must be equal 10", "10", mathOperations.calculate(bigEquation));
     }
 }
