@@ -1,12 +1,14 @@
 package org.training.calculator;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.logging.Logger;
 
 public class Runner {
-    private static final Logger LOG = Logger.getLogger(Runner.class.getName());
+    private static final Logger LOG = LogManager.getLogger(Runner.class);
 
     public static void main(String[] args) throws IOException {
         LOG.info("Enter an expression: ");

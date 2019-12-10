@@ -2,13 +2,13 @@ package org.training.calculator;
 
 import java.util.regex.Pattern;
 
-public class TextToIntConvector implements Convector {
+public class TextToDoubleConverter implements Converter {
 
-    public int[] convert(String input) {
+    public double[] convert(String input) {
         String[] numbers = input.split("[" + Pattern.quote("+-*/") + "]");
-        int[] numbersConverted = new int[numbers.length];
+        double[] numbersConverted = new double[numbers.length];
         for (int i = 0; i < numbers.length; i++) {
-            numbersConverted[i] = Integer.parseInt(numbers[i]);
+            numbersConverted[i] = Double.parseDouble(numbers[i]);
         }
         return numbersConverted;
     }

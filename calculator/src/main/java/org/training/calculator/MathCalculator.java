@@ -1,47 +1,52 @@
 package org.training.calculator;
 
-public class MathCalculator implements Calculator  {
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
-    private  MathOperations mathOperations;
+public class MathCalculator implements Calculator {
 
-    public MathCalculator(MathOperations mathOperations) {
-        this.mathOperations = mathOperations;
+    private Operations operations;
+    private Converter converter;
+    private NumberFormat numberFormat;
+
+    public MathCalculator(Operations operations) {
+        this.operations = operations;
+        this.converter = new TextToDoubleConverter();
+        this.numberFormat = new DecimalFormat("#.#####");
     }
 
     public String calculate(String input) {
-        String[] operations = input.split("[0-9]+");
-        Convector convector = new TextToIntConvector();
-        int[] numbers = convector.convert(input);
-        int length = operations.length;
+        String[] calculation = input.split("\\d+\\.?\\d*");
+        double[] numbers = converter.convert(input);
+        int length = calculation.length;
         int index = 1;
-
         while (index < length) {
-            if ("*".equals(operations[index])) { // NEM!!! "*" == operations[i]
-                numbers[index - 1] = mathOperations.Multiple(numbers[index - 1], numbers[index]);
-                length = checkNext(index, length, numbers, operations);
-            } else if ("/".equals(operations[index])) { // NEM!!! "/" == operations[i]
-                numbers[index - 1] = mathOperations.Divide(numbers[index - 1], numbers[index]);
-                length = checkNext(index, length, numbers, operations);
+            if ("*".equals(calculation[index])) {
+                numbers[index - 1] = operations.multiple(numbers[index - 1], numbers[index]);
+                length = checkNext(index, length, numbers, calculation);
+            } else if ("/".equals(calculation[index])) {
+                numbers[index - 1] = operations.divide(numbers[index - 1], numbers[index]);
+                length = checkNext(index, length, numbers, calculation);
             } else {
                 index++;
             }
         }
         index = 1;
         while (index < length) {
-            if ("+".equals(operations[index])) { // NEM!!! "+" == operations[i]
-                numbers[index - 1] = mathOperations.Plus(numbers[index - 1], numbers[index]);
-                length = checkNext(index, length, numbers, operations);
-            } else if ("-".equals(operations[index])) { // NEM!!! "-" == operations[i]
-                numbers[index - 1] = mathOperations.Minus(numbers[index - 1], numbers[index]);
-                length = checkNext(index, length, numbers, operations);
+            if ("+".equals(calculation[index])) {
+                numbers[index - 1] = operations.plus(numbers[index - 1], numbers[index]);
+                length = checkNext(index, length, numbers, calculation);
+            } else if ("-".equals(calculation[index])) {
+                numbers[index - 1] = operations.minus(numbers[index - 1], numbers[index]);
+                length = checkNext(index, length, numbers, calculation);
             } else {
                 index++;
             }
         }
-        return String.valueOf(numbers[0]);
+        return String.valueOf(numberFormat.format(numbers[0]));
     }
 
-    private static int checkNext(int index, int length, int[] numbers, String[] operations) {
+    private static int checkNext(int index, int length, double[] numbers, String[] operations) {
         for (int j = index; j < length - 1; j++) {
             numbers[j] = numbers[j + 1];
             operations[j] = operations[j + 1];
