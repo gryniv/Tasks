@@ -3,6 +3,8 @@ package org.training.calculator;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+import static org.training.calculator.CalculatorConstants.*;
+
 public class MathCalculator implements Calculator {
 
     private Operations operations;
@@ -12,19 +14,19 @@ public class MathCalculator implements Calculator {
     public MathCalculator(Operations operations) {
         this.operations = operations;
         this.converter = new TextToDoubleConverter();
-        this.numberFormat = new DecimalFormat("#.#####");
+        this.numberFormat = new DecimalFormat(DECIMAL_CONDITION);
     }
 
     public String calculate(String input) {
-        String[] calculation = input.split("\\d+\\.?\\d*");
+        String[] calculation = input.split(SPLIT_CONDITION);
         double[] numbers = converter.convert(input);
         int length = calculation.length;
         int index = 1;
         while (index < length) {
-            if ("*".equals(calculation[index])) {
+            if (MULTIPLE.equals(calculation[index])) {
                 numbers[index - 1] = operations.multiple(numbers[index - 1], numbers[index]);
                 length = checkNext(index, length, numbers, calculation);
-            } else if ("/".equals(calculation[index])) {
+            } else if (DIVIDE.equals(calculation[index])) {
                 numbers[index - 1] = operations.divide(numbers[index - 1], numbers[index]);
                 length = checkNext(index, length, numbers, calculation);
             } else {
@@ -33,10 +35,10 @@ public class MathCalculator implements Calculator {
         }
         index = 1;
         while (index < length) {
-            if ("+".equals(calculation[index])) {
+            if (PLUS.equals(calculation[index])) {
                 numbers[index - 1] = operations.plus(numbers[index - 1], numbers[index]);
                 length = checkNext(index, length, numbers, calculation);
-            } else if ("-".equals(calculation[index])) {
+            } else if (MINUS.equals(calculation[index])) {
                 numbers[index - 1] = operations.minus(numbers[index - 1], numbers[index]);
                 length = checkNext(index, length, numbers, calculation);
             } else {
