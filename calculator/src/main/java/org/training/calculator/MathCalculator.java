@@ -18,7 +18,7 @@ public class MathCalculator implements Calculator {
     }
 
     public String calculate(String input) {
-        String[] calculation = input.split(SPLIT_CONDITION);
+        String[] calculation = input.split(SPLIT_NUMBERS_CONDITION);
         double[] numbers = converter.convert(input);
         int length = calculation.length;
         int index = 1;

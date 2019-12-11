@@ -1,15 +1,13 @@
 package org.training.calculator;
 
-import java.util.regex.Pattern;
+import java.util.stream.Stream;
+
+import static org.training.calculator.CalculatorConstants.SPLIT_OPERATIONS_CONDITION;
 
 public class TextToDoubleConverter implements Converter {
 
     public double[] convert(String input) {
-        String[] numbers = input.split("[" + Pattern.quote("+-*/") + "]");
-        double[] numbersConverted = new double[numbers.length];
-        for (int i = 0; i < numbers.length; i++) {
-            numbersConverted[i] = Double.parseDouble(numbers[i]);
-        }
-        return numbersConverted;
+
+        return Stream.of(input.split(SPLIT_OPERATIONS_CONDITION)).mapToDouble(Double::parseDouble).toArray();
     }
 }
