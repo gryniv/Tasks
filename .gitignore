@@ -25,5 +25,4 @@
 *.iml
 *.ipr
 
-calculator/src/main/resources/
 calculator/target/

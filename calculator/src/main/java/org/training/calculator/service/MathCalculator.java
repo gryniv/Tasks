@@ -1,25 +1,26 @@
-package org.training.calculator;
+package org.training.calculator.service;
+
+import org.training.calculator.operations.Operations;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.stream.Stream;
 
-import static org.training.calculator.CalculatorConstants.*;
+import static org.training.calculator.constants.CalculatorConstants.*;
 
 public class MathCalculator implements Calculator {
 
     private Operations operations;
-    private Converter converter;
     private NumberFormat numberFormat;
 
     public MathCalculator(Operations operations) {
         this.operations = operations;
-        this.converter = new TextToDoubleConverter();
         this.numberFormat = new DecimalFormat(DECIMAL_CONDITION);
     }
 
     public String calculate(String input) {
-        String[] calculation = input.split(SPLIT_NUMBERS_CONDITION);
-        double[] numbers = converter.convert(input);
+        String[] calculation = input.split(SPLIT_NUMBERS);
+        double[] numbers = Stream.of(input.split(SPLIT_OPERATIONS)).mapToDouble(Double::parseDouble).toArray();
         int length = calculation.length;
         int index = 1;
         while (index < length) {

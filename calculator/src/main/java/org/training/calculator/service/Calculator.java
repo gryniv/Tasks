@@ -1,4 +1,4 @@
-package org.training.calculator;
+package org.training.calculator.service;
 
 import java.io.IOException;
 
