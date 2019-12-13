@@ -2,6 +2,7 @@ package org.training.circularbuffer.service;
 
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 
 public class CircularBuffer<T> implements Buffer<T> {
@@ -39,6 +40,23 @@ public class CircularBuffer<T> implements Buffer<T> {
     @Override
     public Object[] toObjectArray() {
         return reverse(buffer).toArray();
+    }
+
+    @Override
+    public List<T> asList() {
+        return reverse(buffer);
+    }
+
+    @Override
+    public void addAll(List<? extends T> toAdd) {
+        for (T a : toAdd) {
+            put(a);
+        }
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return buffer.isEmpty();
     }
 
 
