@@ -45,7 +45,7 @@ public class CircularBuffer<T> implements Buffer<T> {
 
     @Override
     public T[] toArray(T[] array) {
-        return buffer.toArray(array);
+        return reverse(buffer).toArray(array);
     }
 
     @Override
