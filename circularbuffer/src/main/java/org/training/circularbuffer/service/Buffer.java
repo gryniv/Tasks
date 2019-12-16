@@ -1,5 +1,6 @@
 package org.training.circularbuffer.service;
 
+import java.util.Comparator;
 import java.util.List;
 
 public interface Buffer<T> {
@@ -10,9 +11,13 @@ public interface Buffer<T> {
 
     Object[] toObjectArray();
 
+    T[] toArray(T[] array);
+
     List<T> asList();
 
     void addAll(List<? extends T> toAdd);
+
+    void sort(Comparator<? super T> comparator);
 
     boolean isEmpty();
 }

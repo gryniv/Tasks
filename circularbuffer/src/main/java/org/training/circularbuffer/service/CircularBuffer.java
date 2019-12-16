@@ -1,6 +1,7 @@
 package org.training.circularbuffer.service;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,6 +44,11 @@ public class CircularBuffer<T> implements Buffer<T> {
     }
 
     @Override
+    public T[] toArray(T[] array) {
+        return buffer.toArray(array);
+    }
+
+    @Override
     public List<T> asList() {
         return reverse(buffer);
     }
@@ -55,10 +61,14 @@ public class CircularBuffer<T> implements Buffer<T> {
     }
 
     @Override
+    public void sort(Comparator<? super T> comparator) {
+        buffer.sort(comparator);
+    }
+
+    @Override
     public boolean isEmpty() {
         return buffer.isEmpty();
     }
-
 
     private LinkedList<T> reverse(LinkedList<T> list) {
         LinkedList<T> buffer = new LinkedList<>(list);
