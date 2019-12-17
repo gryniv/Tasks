@@ -11,7 +11,7 @@ public interface Buffer<T> {
 
     Object[] toObjectArray();
 
-    T[] toArray(T[] array);
+    T[] toArray();
 
     List<T> asList();
 

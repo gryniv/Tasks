@@ -1,9 +1,6 @@
 package org.training.circularbuffer.service;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 public class CircularBuffer<T> implements Buffer<T> {
@@ -44,8 +41,16 @@ public class CircularBuffer<T> implements Buffer<T> {
     }
 
     @Override
-    public T[] toArray(T[] array) {
-        return reverse(buffer).toArray(array);
+    public T[] toArray() {
+        int bufferSize = buffer.toArray().length;
+        T[] r = (T[]) java.lang.reflect.Array
+                .newInstance(buffer.getClass().getComponentType(), bufferSize);
+        Iterator<Object> it = Arrays.stream(buffer.toArray()).iterator();
+
+        for (int i = 0; i < r.length; i++) {
+            r[i] = (T) it.next();
+        }
+        return r;
     }
 
     @Override
