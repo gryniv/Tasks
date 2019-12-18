@@ -42,15 +42,19 @@ public class CircularBuffer<T> implements Buffer<T> {
 
     @Override
     public T[] toArray() {
-        int bufferSize = buffer.toArray().length;
-        T[] r = (T[]) java.lang.reflect.Array
-                .newInstance(buffer.getClass().getComponentType(), bufferSize);
-        Iterator<Object> it = Arrays.stream(buffer.toArray()).iterator();
+        if (buffer.size() != 0) {
+            int bufferSize = buffer.size();
+            final Class<?> componentType = buffer.get(0).getClass();
+            T[] r = (T[]) java.lang.reflect.Array.newInstance(componentType, bufferSize);
+            Iterator<Object> it = Arrays.stream(buffer.toArray()).iterator();
 
-        for (int i = 0; i < r.length; i++) {
-            r[i] = (T) it.next();
+            for (int i = 0; i < r.length; i++) {
+                r[i] = (T) it.next();
+            }
+            return r;
+        } else {
+            return (T[]) new Object[0];
         }
-        return r;
     }
 
     @Override
