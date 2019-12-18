@@ -10,34 +10,34 @@ public class ArrayCircularBuffer<T> implements Buffer<T> {
 
     private int maxSize;
     private int tail;
-    private int position;
+    private int head;
     private Object[] buffer;
 
     public ArrayCircularBuffer(int maxSize) {
         this.maxSize = maxSize;
-        this.tail = maxSize - 1;
-        this.position = 0;
+        this.tail = 0;
+        this.head = 0;
         this.buffer = new Object[maxSize];
     }
 
     @Override
-    public void put(T o) {
-        if (position == maxSize) {
-            position = 0;
+    public void put(T o) throws RuntimeException{
+        if (head == tail && !isEmpty()){
+            throw new RuntimeException();
+        } else if (head == maxSize) {
+            head = 0;
         }
-        buffer[position++] = o;
+        buffer[head++] = o;
     }
 
     @Override
     public T get() {
-        if (tail <= 0) {
-            tail = maxSize - 1;
+        if (head == tail && !isEmpty()){
+            throw new RuntimeException();
+        } else if (tail == maxSize) {
+            tail = 0;
         }
-        tail--;
-        while (buffer[tail] == null) {
-            tail--;
-        }
-        return (T) buffer[tail];
+        return (T) buffer[tail++];
     }
 
     @Override
@@ -47,7 +47,9 @@ public class ArrayCircularBuffer<T> implements Buffer<T> {
 
     @Override
     public T[] toArray() {
-        if (buffer.length != 0) {
+        if (isEmpty()) {
+            return null;
+        } else if (buffer.length != 0) {
             int bufferSize = buffer.length;
             final Class<?> componentType = buffer[0].getClass();
             T[] r = (T[]) java.lang.reflect.Array
@@ -66,8 +68,7 @@ public class ArrayCircularBuffer<T> implements Buffer<T> {
 
     @Override
     public List<T> asList() {
-        final T[] buffer = (T[]) this.buffer;
-        return Arrays.asList(reverse(buffer));
+        return Arrays.asList(reverse((T[]) buffer));
     }
 
     @Override
@@ -78,7 +79,7 @@ public class ArrayCircularBuffer<T> implements Buffer<T> {
     }
 
     @Override
-    public void sort(Comparator<? super T> comparator) {
+    public void sort(Comparator<? super T> comparator) throws NullPointerException{
         final T[] buffer = (T[]) this.buffer;
         Arrays.sort(buffer, comparator);
     }
