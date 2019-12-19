@@ -1,6 +1,12 @@
 package org.training.circularbuffer.service;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+
+import org.training.circularbuffer.exception.BufferStateException;
 
 public class CircularBuffer<T> implements Buffer<T> {
 
@@ -8,7 +14,6 @@ public class CircularBuffer<T> implements Buffer<T> {
     private int tail;
     private int head;
     private Object[] buffer;
-    private RuntimeException runtimeException = new RuntimeException();
 
     public CircularBuffer(int maxSize) {
         this.maxSize = maxSize;
@@ -20,7 +25,7 @@ public class CircularBuffer<T> implements Buffer<T> {
     @Override
     public void put(T o) {
         if (head == tail && !isEmpty()) {
-            throw runtimeException;
+            throw new BufferStateException("Circular buffer is full exception");
         } else if (head == maxSize) {
             head = 0;
         }
@@ -30,7 +35,7 @@ public class CircularBuffer<T> implements Buffer<T> {
     @Override
     public T get() {
         if (head == tail && !isEmpty()) {
-            throw new RuntimeException();
+            throw new BufferStateException("Circular buffer is empty exception");
         } else if (tail == maxSize) {
             tail = 0;
         }
@@ -44,7 +49,7 @@ public class CircularBuffer<T> implements Buffer<T> {
 
     @Override
     public T[] toArray() {
-        if (isEmpty()){
+        if (isEmpty()) {
             return null;
         }
         int bufferSize = buffer.length;
@@ -73,7 +78,7 @@ public class CircularBuffer<T> implements Buffer<T> {
     }
 
     @Override
-    public void sort(Comparator<? super T> comparator) throws NullPointerException {
+    public void sort(Comparator<? super T> comparator) {
         final T[] sortedBuffer = (T[]) buffer;
         Arrays.sort(sortedBuffer, comparator);
     }
@@ -93,6 +98,4 @@ public class CircularBuffer<T> implements Buffer<T> {
         Collections.reverse(bufferReverse);
         return bufferReverse.toArray(buffer);
     }
-
-
 }
