@@ -4,10 +4,11 @@ import java.util.*;
 
 public class CircularBuffer<T> implements Buffer<T> {
 
-    private int maxSize;
+    private final int maxSize;
     private int tail;
     private int head;
     private Object[] buffer;
+    private RuntimeException runtimeException = new RuntimeException();
 
     public CircularBuffer(int maxSize) {
         this.maxSize = maxSize;
@@ -19,7 +20,7 @@ public class CircularBuffer<T> implements Buffer<T> {
     @Override
     public void put(T o) {
         if (head == tail && !isEmpty()) {
-            throw new RuntimeException();
+            throw runtimeException;
         } else if (head == maxSize) {
             head = 0;
         }
