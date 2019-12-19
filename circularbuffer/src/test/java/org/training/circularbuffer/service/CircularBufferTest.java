@@ -1,24 +1,29 @@
 package org.training.circularbuffer.service;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.training.circularbuffer.exception.BufferStateException;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 public class CircularBufferTest {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
     private Buffer<Integer> bufferFull;
     private Buffer<Integer> bufferEmpty;
     private Buffer<Integer> bufferAddAll;
     private Integer[] expectedBufferArray;
-    private Integer[] toBigBufferArray;
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void setUp() {
@@ -26,7 +31,6 @@ public class CircularBufferTest {
         this.bufferFull = new CircularBuffer<>(10);
         this.bufferAddAll = new CircularBuffer<>(10);
         this.expectedBufferArray = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        this.toBigBufferArray = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
         bufferFull.put(3);
         bufferFull.put(2);
         bufferFull.put(4);
@@ -87,12 +91,14 @@ public class CircularBufferTest {
     public void shouldThrowExceptionWhenNotEnoughFreeSpace() {
         thrown.expect(BufferStateException.class);
         thrown.expectMessage("Not enough free space in the buffer exception");
-        bufferAddAll.addAll(Arrays.asList(toBigBufferArray));
-        assertArrayEquals(bufferAddAll.toArray(), toBigBufferArray);
+
+        bufferAddAll.addAll(Arrays.asList(expectedBufferArray));
+        assertArrayEquals(bufferAddAll.toArray(), expectedBufferArray);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldSort() {
+        Integer[] expectedBufferArray = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         bufferFull.sort(Integer::compareTo);
         assertArrayEquals(bufferFull.toArray(), expectedBufferArray);
     }
