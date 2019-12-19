@@ -8,14 +8,17 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class ArrayCircularBufferTest {
+public class CircularBufferTest {
     private Buffer<Integer> bufferFull;
     private Buffer<Integer> bufferEmpty;
-
+    private Buffer<Integer> bufferAddAll ;
+    private Integer[] expectedBufferArray ;
     @Before
     public void setUp() throws Exception {
-        this.bufferEmpty = new ArrayCircularBuffer<>(10);
-        this.bufferFull = new ArrayCircularBuffer<>(10);
+        this.bufferEmpty = new CircularBuffer<>(10);
+        this.bufferFull = new CircularBuffer<>(10);
+        this.bufferAddAll = new CircularBuffer<>(10);
+        this.expectedBufferArray = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         bufferFull.put(3);
         bufferFull.put(2);
         bufferFull.put(4);
@@ -43,41 +46,39 @@ public class ArrayCircularBufferTest {
 
     @Test
     public void shouldTransformToObjectArray() {
-        Object[] a = bufferFull.toObjectArray();
-        assertArrayEquals(bufferFull.toObjectArray(), a);
-        Object[] b = bufferEmpty.toObjectArray();
-        assertArrayEquals(bufferEmpty.toObjectArray(), b);
+        Object[] fullBufferToObjectArray = bufferFull.toObjectArray();
+        assertArrayEquals(bufferFull.toObjectArray(), fullBufferToObjectArray);
+        Object[] emptyBufferToObjectArray = bufferEmpty.toObjectArray();
+        assertArrayEquals(bufferEmpty.toObjectArray(), emptyBufferToObjectArray);
     }
 
     @Test
     public void shouldTransformToArray() {
-        Integer[] a = bufferFull.toArray();
-        assertArrayEquals(bufferFull.toArray(), a);
-        Integer[] b = bufferEmpty.toArray();
-        assertArrayEquals(bufferEmpty.toArray(), b);
+        Integer[] fullBufferToArray = bufferFull.toArray();
+        assertArrayEquals(bufferFull.toArray(), fullBufferToArray);
+        Integer[] emptyBufferToArray = bufferEmpty.toArray();
+        assertArrayEquals(bufferEmpty.toArray(), emptyBufferToArray);
     }
 
     @Test
     public void shouldTransformAsList() {
-        List<Integer> a = bufferFull.asList();
-        assertEquals(bufferFull.asList(), a);
-        List<Integer> b = bufferEmpty.asList();
-        assertEquals(bufferEmpty.asList(), b);
+        List<Integer> fullBufferToList = bufferFull.asList();
+        assertEquals(bufferFull.asList(), fullBufferToList);
+        List<Integer> emptyBufferToList = bufferEmpty.asList();
+        assertEquals(bufferEmpty.asList(), emptyBufferToList);
     }
 
     @Test
     public void shouldAddAll() {
-        Buffer<Integer> bufferAddAll = new ArrayCircularBuffer<>(10);
-        Integer[] b = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        bufferAddAll.addAll(Arrays.asList(b));
-        assertArrayEquals(bufferAddAll.toArray(), b);
+        bufferAddAll.addAll(Arrays.asList(expectedBufferArray ));
+        assertArrayEquals(bufferAddAll.toArray(), expectedBufferArray );
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldSort() {
-        Integer[] a = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        Integer[] expectedBufferArray  = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         bufferFull.sort(Integer::compareTo);
-        assertArrayEquals(a, bufferFull.toArray());
+        assertArrayEquals(bufferFull.toArray(), expectedBufferArray);
         bufferEmpty.sort(Integer::compareTo);
     }
 
