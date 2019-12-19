@@ -2,64 +2,66 @@ package org.training.circularbuffer.service;
 
 import java.util.*;
 
-
 public class CircularBuffer<T> implements Buffer<T> {
-
-    private LinkedList<T> buffer = new LinkedList<>();
 
     private int maxSize;
     private int tail;
+    private int head;
+    private Object[] buffer;
 
     public CircularBuffer(int maxSize) {
         this.maxSize = maxSize;
-        this.tail = maxSize - 1;
+        this.tail = 0;
+        this.head = 0;
+        this.buffer = new Object[maxSize];
     }
 
     @Override
     public void put(T o) {
-        buffer.add(o);
-        if (buffer.size() > maxSize) {
-            buffer.remove();
+        if (head == tail && !isEmpty()) {
+            throw new RuntimeException();
+        } else if (head == maxSize) {
+            head = 0;
         }
+        buffer[head++] = o;
     }
 
     @Override
-    public T get() throws RuntimeException {
-        if (maxSize != 1) {
-            if (tail < 0) {
-                tail = maxSize - 1;
-            }
-            return buffer.get(tail--);
-        } else {
+    public T get() {
+        if (head == tail && !isEmpty()) {
             throw new RuntimeException();
+        } else if (tail == maxSize) {
+            tail = 0;
         }
+        return (T) buffer[tail++];
     }
 
     @Override
     public Object[] toObjectArray() {
-        return reverse(buffer).toArray();
+        return reverse((T[]) buffer);
     }
 
     @Override
     public T[] toArray() {
-        if (buffer.size() != 0) {
-            int bufferSize = buffer.size();
-            final Class<?> componentType = buffer.get(0).getClass();
-            T[] r = (T[]) java.lang.reflect.Array.newInstance(componentType, bufferSize);
-            Iterator<Object> it = Arrays.stream(buffer.toArray()).iterator();
-
-            for (int i = 0; i < r.length; i++) {
-                r[i] = (T) it.next();
-            }
-            return r;
-        } else {
-            return (T[]) new Object[0];
+        if (isEmpty()){
+            return null;
         }
+        int bufferSize = buffer.length;
+        final Class<?> componentType = buffer[0].getClass();
+        T[] arrayBuffer = (T[]) java.lang.reflect.Array
+                .newInstance(componentType, bufferSize);
+
+        Iterator<Object> it = Arrays.stream(buffer).iterator();
+        for (int i = 0; i < arrayBuffer.length; i++) {
+            arrayBuffer[i] = (T) it.next();
+        }
+        return arrayBuffer;
+
     }
 
     @Override
     public List<T> asList() {
-        return reverse(buffer);
+        return Arrays.asList(reverse((T[]) buffer));
     }
 
     @Override
@@ -70,20 +72,26 @@ public class CircularBuffer<T> implements Buffer<T> {
     }
 
     @Override
-    public void sort(Comparator<? super T> comparator) {
-        buffer.sort(comparator);
+    public void sort(Comparator<? super T> comparator) throws NullPointerException {
+        final T[] sortedBuffer = (T[]) buffer;
+        Arrays.sort(sortedBuffer, comparator);
     }
 
     @Override
     public boolean isEmpty() {
-        return buffer.isEmpty();
+        for (Object o : buffer) {
+            if (o != null) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    private LinkedList<T> reverse(LinkedList<T> list) {
-        LinkedList<T> buffer = new LinkedList<>(list);
-        Collections.reverse(buffer);
-        return buffer;
+    private T[] reverse(T[] buffer) {
+        List<T> bufferReverse = Arrays.asList(buffer);
+        Collections.reverse(bufferReverse);
+        return bufferReverse.toArray(buffer);
     }
+
 
 }
-
