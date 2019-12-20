@@ -21,9 +21,7 @@ public class CircularBufferTest {
     private Buffer<Integer> bufferEmpty;
     private Buffer<Integer> bufferAddAll;
     private Integer[] expectedBufferArray;
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    private Integer[] tooBigBufferArray;
 
     @Before
     public void setUp() {
@@ -31,6 +29,7 @@ public class CircularBufferTest {
         this.bufferFull = new CircularBuffer<>(10);
         this.bufferAddAll = new CircularBuffer<>(10);
         this.expectedBufferArray = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        this.tooBigBufferArray = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
         bufferFull.put(3);
         bufferFull.put(2);
         bufferFull.put(4);
@@ -92,13 +91,12 @@ public class CircularBufferTest {
         thrown.expect(BufferStateException.class);
         thrown.expectMessage("Not enough free space in the buffer exception");
 
-        bufferAddAll.addAll(Arrays.asList(expectedBufferArray));
-        assertArrayEquals(bufferAddAll.toArray(), expectedBufferArray);
+        bufferAddAll.addAll(Arrays.asList(tooBigBufferArray));
+        assertArrayEquals(bufferAddAll.toArray(), tooBigBufferArray);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldSort() {
-        Integer[] expectedBufferArray = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         bufferFull.sort(Integer::compareTo);
         assertArrayEquals(bufferFull.toArray(), expectedBufferArray);
     }
