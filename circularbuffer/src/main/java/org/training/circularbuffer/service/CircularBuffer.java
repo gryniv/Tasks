@@ -72,6 +72,9 @@ public class CircularBuffer<T> implements Buffer<T> {
 
     @Override
     public void addAll(List<? extends T> toAdd) {
+        if (maxSize < toAdd.size()) {
+            throw new BufferStateException("Not enough free space in the buffer exception");
+        }
         for (T a : toAdd) {
             put(a);
         }
