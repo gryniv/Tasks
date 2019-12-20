@@ -79,7 +79,6 @@ public class CircularBufferTest {
     @Test
     public void shouldAddAll() {
         bufferAddAll.addAll(Arrays.asList(expectedBufferArray));
-
         assertArrayEquals(bufferAddAll.toArray(), expectedBufferArray);
     }
 
@@ -87,7 +86,6 @@ public class CircularBufferTest {
     public void shouldThrowExceptionWhenNotEnoughFreeSpace() {
         thrown.expect(BufferStateException.class);
         thrown.expectMessage("Not enough free space in the buffer exception");
-
         bufferAddAll.addAll(Arrays.asList(tooBigBufferArray));
         assertArrayEquals(bufferAddAll.toArray(), tooBigBufferArray);
     }
