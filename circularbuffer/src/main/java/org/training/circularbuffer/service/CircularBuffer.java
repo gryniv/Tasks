@@ -1,12 +1,8 @@
 package org.training.circularbuffer.service;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
 import org.training.circularbuffer.exception.BufferStateException;
+
+import java.util.*;
 
 public class CircularBuffer<T> implements Buffer<T> {
 
@@ -82,8 +78,7 @@ public class CircularBuffer<T> implements Buffer<T> {
 
     @Override
     public void sort(Comparator<? super T> comparator) {
-        final T[] sortedBuffer = (T[]) buffer;
-        Arrays.sort(sortedBuffer, comparator);
+        Arrays.sort((T[]) buffer, comparator);
     }
 
     @Override

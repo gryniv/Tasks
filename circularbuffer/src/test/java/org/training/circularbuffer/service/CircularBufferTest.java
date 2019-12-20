@@ -39,7 +39,12 @@ public class CircularBufferTest {
     }
 
     @Test
-    public void shouldCorrectlyGetFromTail() {
+    public void shouldCorrectlyGetFromEmptyBufferTail() {
+        assertNull(bufferEmpty.get());
+    }
+
+    @Test
+    public void shouldCorrectlyGetFromFullBufferTail() {
         assertSame(3, bufferFull.get());
         assertSame(2, bufferFull.get());
         assertSame(4, bufferFull.get());
@@ -49,31 +54,42 @@ public class CircularBufferTest {
         assertSame(6, bufferFull.get());
         assertSame(1, bufferFull.get());
         assertSame(10, bufferFull.get());
-        assertNull(bufferEmpty.get());
     }
 
     @Test
-    public void shouldTransformToObjectArray() {
-        Object[] fullBufferToObjectArray = bufferFull.toObjectArray();
-        assertArrayEquals(bufferFull.toObjectArray(), fullBufferToObjectArray);
+    public void shouldTransformEmptyBufferToObjectArray() {
         Object[] emptyBufferToObjectArray = bufferEmpty.toObjectArray();
         assertArrayEquals(bufferEmpty.toObjectArray(), emptyBufferToObjectArray);
     }
 
     @Test
-    public void shouldTransformToArray() {
-        Integer[] fullBufferToArray = bufferFull.toArray();
-        assertArrayEquals(bufferFull.toArray(), fullBufferToArray);
+    public void shouldTransformFullBufferToObjectArray() {
+        Object[] fullBufferToObjectArray = bufferFull.toObjectArray();
+        assertArrayEquals(bufferFull.toObjectArray(), fullBufferToObjectArray);
+    }
+
+    @Test
+    public void shouldTransformEmptyBufferToArray() {
         Integer[] emptyBufferToArray = bufferEmpty.toArray();
         assertArrayEquals(bufferEmpty.toArray(), emptyBufferToArray);
     }
 
     @Test
-    public void shouldTransformAsList() {
-        List<Integer> fullBufferToList = bufferFull.asList();
-        assertEquals(bufferFull.asList(), fullBufferToList);
+    public void shouldTransformFullBufferToArray() {
+        Integer[] fullBufferToArray = bufferFull.toArray();
+        assertArrayEquals(bufferFull.toArray(), fullBufferToArray);
+    }
+
+    @Test
+    public void shouldTransformEmptyBufferAsList() {
         List<Integer> emptyBufferToList = bufferEmpty.asList();
         assertEquals(bufferEmpty.asList(), emptyBufferToList);
+    }
+
+    @Test
+    public void shouldTransformFullBufferAsList() {
+        List<Integer> fullBufferToList = bufferFull.asList();
+        assertEquals(bufferFull.asList(), fullBufferToList);
     }
 
     @Test
