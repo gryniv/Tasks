@@ -1,22 +1,19 @@
 package org.training.circularbuffer.service;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.training.circularbuffer.exception.BufferStateException;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class CircularBufferTest {
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
     private Buffer<Integer> bufferFull;
     private Buffer<Integer> bufferEmpty;
     private Buffer<Integer> bufferAddAll;
