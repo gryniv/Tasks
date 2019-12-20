@@ -25,4 +25,4 @@
 *.iml
 *.ipr
 
-calculator/target/
+target/
