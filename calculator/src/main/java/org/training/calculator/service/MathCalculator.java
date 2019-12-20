@@ -1,6 +1,6 @@
 package org.training.calculator.service;
 
-import org.training.calculator.operations.Operations;
+import org.training.calculator.operations.math.Operations;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

@@ -10,15 +10,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>calculator</artifactId>
-    <name>Ihor's Calculator</name>
+    <artifactId>circularbuffer</artifactId>
+    <name>Ihor's Circular Buffer</name>
     <url>http://homework.org</url>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>21.0</version>
-        </dependency>
-    </dependencies>
 </project>
