@@ -8,7 +8,7 @@ import org.training.calculator.operations.hash.Crypt;
 import java.io.IOException;
 
 public class HashCalculatorTest {
-    private Calculator hashCalculator;
+    private HashCalculator hashCalculator;
     private String mustReturnHashString = "f77ccbdb203c19d3d52b12a85f33faf5";
 
     @Before
@@ -18,6 +18,6 @@ public class HashCalculatorTest {
 
     @Test
     public void shouldCalculateStringToHash() throws IOException {
-        Assert.assertEquals(hashCalculator.calculate("Doctors"), mustReturnHashString);
+        Assert.assertEquals(hashCalculator.calculate().md5("Doctors"), mustReturnHashString);
     }
 }

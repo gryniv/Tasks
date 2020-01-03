@@ -4,22 +4,22 @@ import org.training.calculator.operations.hash.Crypt;
 import org.training.calculator.operations.hash.Decrypt;
 import org.training.calculator.operations.hash.Hash;
 
-public final class HashCalculator implements Calculator {
+import java.io.IOException;
 
-    private Hash calculate;
-    private String hashType;
+public final class HashCalculator {
+
+    private Hash calculator;
 
     public HashCalculator(Crypt crypt) {
-        this.calculate = crypt;
+        this.calculator = crypt;
     }
 
     public HashCalculator(Decrypt decrypt) {
-        this.calculate = decrypt;
+        this.calculator = decrypt;
     }
 
-    public String calculate(String input) {
 
-        return calculate.md5(input);
-
+    public Hash calculate() throws IOException {
+        return calculator;
     }
 }

@@ -13,11 +13,5 @@ public class Crypt implements Hash {
         hasher.putString(toHash, StandardCharsets.UTF_8);
         return hasher.hash().toString();
     }
-
-    public String sha1(String toHash) {
-        Hasher hasher = Hashing.sha1().newHasher();
-        hasher.putString(toHash, StandardCharsets.UTF_8);
-        return hasher.hash().toString();
-    }
 }
 
