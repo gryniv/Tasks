@@ -25,6 +25,7 @@
     <modules>
         <module>calculator</module>
         <module>circularbuffer</module>
+        <module>restaurant</module>
     </modules>
 
     <dependencies>
