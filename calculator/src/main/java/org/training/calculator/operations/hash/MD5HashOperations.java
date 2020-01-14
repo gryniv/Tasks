@@ -1,6 +1,12 @@
 package org.training.calculator.operations.hash;
 
+import com.google.common.hash.Hasher;
+import com.google.common.hash.Hashing;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -8,12 +14,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import com.google.common.hash.Hasher;
-import com.google.common.hash.Hashing;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class MD5HashOperations implements HashOperations {
     private static final Logger LOG = LogManager.getLogger(MD5HashOperations.class);
@@ -27,6 +27,8 @@ public class MD5HashOperations implements HashOperations {
     private static int rangeCounter = 0;
     private static final AtomicBoolean IS_COMPLETED = new AtomicBoolean();
     private static final ExecutorService SERVICE;
+    private static final DecimalFormat df = new DecimalFormat("###.##");
+    private static double startTime;
     private String target;
 
     static {
@@ -43,6 +45,7 @@ public class MD5HashOperations implements HashOperations {
     }
 
     public String decode(String inputHash) {
+        startTime = System.currentTimeMillis();
         target = inputHash;
         fillRanges(0, CHARACTERS.length - 1);
 
@@ -84,7 +87,7 @@ public class MD5HashOperations implements HashOperations {
             if (target.equals(hash)) {
                 IS_COMPLETED.set(true);
                 SERVICE.shutdownNow();
-                LOG.info("Hash found, key: " + chars);
+                LOG.info("Hash found for: " + df.format((System.currentTimeMillis() - startTime)/1000) + " sec");
                 throw new InterruptedException(chars);
             }
         } else {
