@@ -1,19 +1,11 @@
 package org.training.calculator.service;
 
-import org.training.calculator.operations.hash.Crypt;
-import org.training.calculator.operations.hash.Hash;
+import org.training.calculator.service.Calculator;
 
-import java.io.IOException;
+public interface HashCalculator {
 
-public final class HashCalculator extends Thread {
+    String encode(String o);
 
-    private Hash calculator;
+    String decode(String o);
 
-    public HashCalculator(Crypt crypt) {
-        this.calculator = crypt;
-    }
-
-    public Hash calculate() throws IOException {
-        return calculator;
-    }
 }
