@@ -1,8 +1,17 @@
 package org.training.restaurant.customer;
 
-public class Client implements Customer{
+import java.util.Random;
 
-    Order order = new Order();
+public class Client implements Customer {
+    private static Random random;
 
+    @Override
+    public void happiness() {
+        int startHappiness = random.nextInt(100);
+    }
 
+    @Override
+    public String name() {
+        return "Bob";
+    }
 }

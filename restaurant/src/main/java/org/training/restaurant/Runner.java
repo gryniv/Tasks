@@ -3,16 +3,16 @@ package org.training.restaurant;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.training.restaurant.customer.Client;
-import org.training.restaurant.order.Menu;
+import org.training.restaurant.restaurant.Restaurant;
 
 public class Runner {
     private static final Logger LOG = LogManager.getLogger(Runner.class);
+    private static Restaurant yaponaHata = new Restaurant();
+    private static Client client = new Client();
 
     public static void main(String[] args) {
-        Menu menu = new Menu();
-        Client client = new Client();
-            LOG.info(menu.getMenu());
-//        LOG.info(client.order());
+        LOG.info(yaponaHata.getMenu());
+        LOG.info(client.name());
 
     }
 }
