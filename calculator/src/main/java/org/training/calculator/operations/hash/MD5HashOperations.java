@@ -33,7 +33,12 @@ public class MD5HashOperations implements HashOperations {
     private String target;
 
     static {
-        AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors() * 2;
+        final var availableProcessors = Runtime.getRuntime().availableProcessors();
+        if (availableProcessors * 2 <= CHARACTERS.length) {
+            AVAILABLE_PROCESSORS = availableProcessors * 2;
+        } else {
+            AVAILABLE_PROCESSORS = availableProcessors;
+        }
         RANGES = new int[AVAILABLE_PROCESSORS][2];
         THRESHOLD = CHARACTERS.length / AVAILABLE_PROCESSORS;
         SERVICE = Executors.newFixedThreadPool(AVAILABLE_PROCESSORS);
@@ -102,7 +107,7 @@ public class MD5HashOperations implements HashOperations {
 
     private static void fillRanges(int start, int end) {
         if (end - start <= THRESHOLD + 1) {
-            LOG.info("[start=" + start + ", end=" + end + "]");
+            LOG.info("[start={}, end={}]", start, end);
             RANGES[rangeCounter][0] = start;
             RANGES[rangeCounter][1] = end;
             rangeCounter++;

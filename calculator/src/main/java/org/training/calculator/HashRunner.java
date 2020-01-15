@@ -13,12 +13,12 @@ public class HashRunner {
     public static void main(String[] args) {
         String input = "4fd0101ea3d0f5abbe296ef97f47afec";
 
-        LOG.info("Enter an expression: " + input);
+        LOG.info("Enter an expression: {}", input);
         HashOperations operations = new MD5HashOperations();
         HashCalculator hashCalculator = new MD5HashCalculator(operations);
 
         final String decode = hashCalculator.decode(input);
-        LOG.info("Completed: " + decode);
+        LOG.info("Completed: {}", decode);
     }
 }
 
