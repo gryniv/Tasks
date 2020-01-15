@@ -22,29 +22,29 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 public class MD5HashOperations implements HashOperations {
     private static final Logger LOG = LogManager.getLogger(MD5HashOperations.class);
 
-    private static final int[][] RANGES;
     private static final String[] CHARACTERS = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
             "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
-    private static final int THRESHOLD;
-    private static final int AVAILABLE_PROCESSORS;
-    private static int rangeCounter = 0;
-    private static final AtomicBoolean IS_COMPLETED = new AtomicBoolean();
-    private static final ExecutorService SERVICE;
     private static final String PATTERN = "###.##";
     private static final DecimalFormat FORMAT = new DecimalFormat(PATTERN);
+    private final AtomicBoolean isCompleted = new AtomicBoolean();
+    private final int[][] ranges;
+    private final int threshold;
+    private final ExecutorService executorService;
+    private int rangeCounter = 0;
     private long startTime;
     private String target;
 
-    static {
-        final var availableProcessors = Runtime.getRuntime().availableProcessors();
+    public MD5HashOperations() {
+        final int availableProcessors = Runtime.getRuntime().availableProcessors();
+        final int threads;
         if (availableProcessors * 2 <= CHARACTERS.length) {
-            AVAILABLE_PROCESSORS = availableProcessors * 2;
+            threads = availableProcessors * 2;
         } else {
-            AVAILABLE_PROCESSORS = availableProcessors;
+            threads = availableProcessors;
         }
-        RANGES = new int[AVAILABLE_PROCESSORS][2];
-        THRESHOLD = CHARACTERS.length / AVAILABLE_PROCESSORS;
-        SERVICE = Executors.newFixedThreadPool(AVAILABLE_PROCESSORS);
+        ranges = new int[threads][2];
+        threshold = CHARACTERS.length / threads;
+        executorService = Executors.newFixedThreadPool(threads);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class MD5HashOperations implements HashOperations {
         fillRanges(0, CHARACTERS.length - 1);
 
         List<Callable<String>> futureList = new ArrayList<>();
-        for (final int[] range : RANGES) {
+        for (final int[] range : ranges) {
             final int start = range[0];
             final int end = range[1];
             final Callable<String> future = () -> {
@@ -82,8 +82,8 @@ public class MD5HashOperations implements HashOperations {
         }
 
         try {
-            final String decodedValue = SERVICE.invokeAny(futureList);
-            SERVICE.shutdownNow();
+            final String decodedValue = executorService.invokeAny(futureList);
+            executorService.shutdownNow();
             return decodedValue;
         } catch (final InterruptedException | ExecutionException e) {
             LOG.debug(e.getMessage());
@@ -94,14 +94,14 @@ public class MD5HashOperations implements HashOperations {
 
     private void permutation(final String chars, final int position) throws InterruptedException {
         if (position == 0) {
-            if (IS_COMPLETED.get()) {
+            if (isCompleted.get()) {
                 throw new TaskCompletedException();
             }
             final String hash = encode(chars);
             if (target.equals(hash)) {
                 final String total = FORMAT.format((double) (System.currentTimeMillis() - startTime) / 1_000);
                 LOG.info("Hash found for {} sec", total);
-                IS_COMPLETED.set(true);
+                isCompleted.set(true);
                 throw new InterruptedException(chars);
             }
         } else {
@@ -111,11 +111,11 @@ public class MD5HashOperations implements HashOperations {
         }
     }
 
-    private static void fillRanges(int start, int end) {
-        if (end - start <= THRESHOLD + 1) {
+    private void fillRanges(int start, int end) {
+        if (end - start <= threshold + 1) {
             LOG.info("[start={}, end={}]", start, end);
-            RANGES[rangeCounter][0] = start;
-            RANGES[rangeCounter][1] = end;
+            ranges[rangeCounter][0] = start;
+            ranges[rangeCounter][1] = end;
             rangeCounter++;
         } else {
             final int middle = start + ((end - start) / 2);
