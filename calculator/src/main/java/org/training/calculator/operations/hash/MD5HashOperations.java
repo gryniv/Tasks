@@ -15,6 +15,9 @@ import com.google.common.hash.Hashing;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.training.calculator.exception.TaskCompletedException;
+
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 public class MD5HashOperations implements HashOperations {
     private static final Logger LOG = LogManager.getLogger(MD5HashOperations.class);
@@ -24,11 +27,11 @@ public class MD5HashOperations implements HashOperations {
             "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
     private static final int THRESHOLD;
     private static final int AVAILABLE_PROCESSORS;
-    private static final String EMPTY_RESULT = "";
     private static int rangeCounter = 0;
     private static final AtomicBoolean IS_COMPLETED = new AtomicBoolean();
     private static final ExecutorService SERVICE;
-    private static final DecimalFormat FORMAT = new DecimalFormat("###.##");
+    private static final String PATTERN = "###.##";
+    private static final DecimalFormat FORMAT = new DecimalFormat(PATTERN);
     private long startTime;
     private String target;
 
@@ -45,14 +48,15 @@ public class MD5HashOperations implements HashOperations {
     }
 
     @Override
-    public String encode(String toHash) {
+    @SuppressWarnings("UnstableApiUsage deprecation")
+    public String encode(final String toHash) {
         Hasher hasher = Hashing.md5().newHasher();
         hasher.putString(toHash, StandardCharsets.UTF_8);
         return hasher.hash().toString();
     }
 
     @Override
-    public String decode(String inputHash) {
+    public String decode(final String inputHash) {
         startTime = System.currentTimeMillis();
         target = inputHash;
         fillRanges(0, CHARACTERS.length - 1);
@@ -61,17 +65,18 @@ public class MD5HashOperations implements HashOperations {
         for (final int[] range : RANGES) {
             final int start = range[0];
             final int end = range[1];
-            Callable<String> future = () -> {
+            final Callable<String> future = () -> {
                 for (int i = 0; i < CHARACTERS.length; i++) {
                     for (int k = start; k < end; k++) {
                         try {
                             permutation(CHARACTERS[k], i);
                         } catch (final InterruptedException e) {
+                            Thread.currentThread().interrupt();
                             return e.getMessage();
                         }
                     }
                 }
-                return EMPTY_RESULT;
+                return EMPTY;
             };
             futureList.add(future);
         }
@@ -82,14 +87,15 @@ public class MD5HashOperations implements HashOperations {
             return decodedValue;
         } catch (final InterruptedException | ExecutionException e) {
             LOG.debug(e.getMessage());
-            return EMPTY_RESULT;
+            Thread.currentThread().interrupt();
+            return EMPTY;
         }
     }
 
-    private void permutation(final String chars, int position) throws Exception {
+    private void permutation(final String chars, final int position) throws InterruptedException {
         if (position == 0) {
             if (IS_COMPLETED.get()) {
-                throw new RuntimeException();
+                throw new TaskCompletedException();
             }
             final String hash = encode(chars);
             if (target.equals(hash)) {
