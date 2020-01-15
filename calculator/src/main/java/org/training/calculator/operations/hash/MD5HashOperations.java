@@ -33,18 +33,20 @@ public class MD5HashOperations implements HashOperations {
     private String target;
 
     static {
-        AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
+        AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors() * 2;
         RANGES = new int[AVAILABLE_PROCESSORS][2];
         THRESHOLD = CHARACTERS.length / AVAILABLE_PROCESSORS;
         SERVICE = Executors.newFixedThreadPool(AVAILABLE_PROCESSORS);
     }
 
+    @Override
     public String encode(String toHash) {
         Hasher hasher = Hashing.md5().newHasher();
         hasher.putString(toHash, StandardCharsets.UTF_8);
         return hasher.hash().toString();
     }
 
+    @Override
     public String decode(String inputHash) {
         startTime = System.currentTimeMillis();
         target = inputHash;
@@ -89,7 +91,6 @@ public class MD5HashOperations implements HashOperations {
                 final String total = FORMAT.format((double) (System.currentTimeMillis() - startTime) / 1_000);
                 LOG.info("Hash found for {} sec", total);
                 IS_COMPLETED.set(true);
-                SERVICE.shutdownNow();
                 throw new InterruptedException(chars);
             }
         } else {
