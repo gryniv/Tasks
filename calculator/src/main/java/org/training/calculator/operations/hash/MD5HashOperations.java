@@ -61,7 +61,7 @@ public class MD5HashOperations implements HashOperations {
         target = inputHash;
         fillRanges(0, CHARACTERS.length - 1);
 
-        List<Callable<String>> futureList = new ArrayList<>();
+        final List<Callable<String>> futureList = new ArrayList<>();
         for (final int[] range : ranges) {
             final int start = range[0];
             final int end = range[1];
@@ -82,13 +82,12 @@ public class MD5HashOperations implements HashOperations {
         }
 
         try {
-            final String decodedValue = executorService.invokeAny(futureList);
-            executorService.shutdownNow();
-            return decodedValue;
+            return executorService.invokeAny(futureList);
         } catch (final InterruptedException | ExecutionException e) {
             LOG.debug(e.getMessage());
-            Thread.currentThread().interrupt();
             return EMPTY;
+        } finally {
+            executorService.shutdownNow();
         }
     }
 

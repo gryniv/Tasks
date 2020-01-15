@@ -21,7 +21,7 @@ public class HashRunner {
         HashOperations operations = new MD5HashOperations();
         Calculator hashCalculator = new MD5HashCalculator(operations);
 
-        final var result = hashCalculator.calculate(input);
+        final String result = hashCalculator.calculate(input);
         LOG.info("Result: {}", result);
     }
 }
