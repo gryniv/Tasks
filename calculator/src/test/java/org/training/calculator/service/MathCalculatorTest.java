@@ -1,10 +1,9 @@
-package org.training.calculator;
+package org.training.calculator.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.training.calculator.service.Calculator;
-import org.training.calculator.service.MathCalculator;
-import org.training.calculator.operations.MathOperations;
+import org.training.calculator.operations.math.MathOperations;
+import org.training.calculator.service.impl.MathCalculator;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package org.training.calculator.operations;
+package org.training.calculator.operations.math;
 
 public class MathOperations implements Operations {
 
