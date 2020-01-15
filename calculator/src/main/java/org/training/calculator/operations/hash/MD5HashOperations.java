@@ -71,7 +71,6 @@ public class MD5HashOperations implements HashOperations {
                         try {
                             permutation(CHARACTERS[k], i);
                         } catch (final InterruptedException e) {
-                            Thread.currentThread().interrupt();
                             return e.getMessage();
                         }
                     }
