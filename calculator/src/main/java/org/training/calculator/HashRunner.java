@@ -1,24 +1,28 @@
 package org.training.calculator;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.training.calculator.operations.hash.HashOperations;
 import org.training.calculator.operations.hash.MD5HashOperations;
-import org.training.calculator.service.HashCalculator;
+import org.training.calculator.service.Calculator;
 import org.training.calculator.service.impl.MD5HashCalculator;
 
 public class HashRunner {
     private static final Logger LOG = LogManager.getLogger(HashRunner.class);
 
-    public static void main(String[] args) {
-        String input = "4fd0101ea3d0f5abbe296ef97f47afec";
+    public static void main(String[] args) throws IOException {
+        LOG.info("Enter an expression: "); // 4fd0101ea3d0f5abbe296ef97f47afec
+        String input = new BufferedReader(new InputStreamReader(System.in)).readLine();
 
-        LOG.info("Enter an expression: {}", input);
         HashOperations operations = new MD5HashOperations();
-        HashCalculator hashCalculator = new MD5HashCalculator(operations);
+        Calculator hashCalculator = new MD5HashCalculator(operations);
 
-        final String decode = hashCalculator.decode(input);
-        LOG.info("Completed: {}", decode);
+        final var result = hashCalculator.calculate(input);
+        LOG.info("Result: {}", result);
     }
 }
 

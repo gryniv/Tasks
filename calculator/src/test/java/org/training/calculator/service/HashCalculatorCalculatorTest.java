@@ -1,6 +1,6 @@
 package org.training.calculator.service;
 
-import java.util.concurrent.ExecutionException;
+import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,7 +9,7 @@ import org.training.calculator.operations.hash.MD5HashOperations;
 import org.training.calculator.service.impl.MD5HashCalculator;
 
 public class HashCalculatorCalculatorTest {
-    private HashCalculator hashCalculator;
+    private Calculator hashCalculator;
 
     @Before
     public void setUp() {
@@ -17,14 +17,16 @@ public class HashCalculatorCalculatorTest {
     }
 
     @Test
-    public void shouldCalculateStringToHash() {
-        final String expectedString = "f77ccbdb203c19d3d52b12a85f33faf5";
-        Assert.assertEquals(expectedString, hashCalculator.encode("Doctors"));
+    public void shouldCalculateStringToHash() throws IOException {
+        final var input = "encode Doctors";
+        final var expectedString = "f77ccbdb203c19d3d52b12a85f33faf5";
+        Assert.assertEquals(expectedString, hashCalculator.calculate(input));
     }
 
     @Test
-    public void shouldDecodeToString() {
-        final String expectedHash = "900150983cd24fb0d6963f7d28e17f72";
-        Assert.assertEquals("abc", hashCalculator.decode(expectedHash));
+    public void shouldDecodeToString() throws IOException {
+        final var input = "decode 900150983cd24fb0d6963f7d28e17f72";
+        final var expectedString = "abc";
+        Assert.assertEquals(expectedString, hashCalculator.calculate(input));
     }
 }

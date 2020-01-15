@@ -66,7 +66,7 @@ public class MD5HashOperations implements HashOperations {
                     for (int k = start; k < end; k++) {
                         try {
                             permutation(CHARACTERS[k], i);
-                        } catch (InterruptedException e) {
+                        } catch (final InterruptedException e) {
                             return e.getMessage();
                         }
                     }
@@ -80,7 +80,7 @@ public class MD5HashOperations implements HashOperations {
             final String decodedValue = SERVICE.invokeAny(futureList);
             SERVICE.shutdownNow();
             return decodedValue;
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (final InterruptedException | ExecutionException e) {
             LOG.debug(e.getMessage());
             return EMPTY_RESULT;
         }
