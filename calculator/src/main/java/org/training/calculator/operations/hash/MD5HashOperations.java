@@ -1,5 +1,11 @@
 package org.training.calculator.operations.hash;
 
+import com.google.common.hash.Hasher;
+import com.google.common.hash.Hashing;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.training.calculator.exception.TaskCompletedException;
+
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -9,13 +15,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import com.google.common.hash.Hasher;
-import com.google.common.hash.Hashing;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.training.calculator.exception.TaskCompletedException;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -29,14 +28,15 @@ public class MD5HashOperations implements HashOperations {
     private final AtomicBoolean isCompleted = new AtomicBoolean();
     private final int[][] ranges;
     private final int threshold;
+    private final int[] arr;
     private final ExecutorService executorService;
     private int rangeCounter = 0;
     private long startTime;
     private String target;
+    private final int threads;
 
     public MD5HashOperations() {
         final int availableProcessors = Runtime.getRuntime().availableProcessors();
-        final int threads;
         if (availableProcessors * 2 <= CHARACTERS.length) {
             threads = availableProcessors * 2;
         } else {
@@ -44,6 +44,7 @@ public class MD5HashOperations implements HashOperations {
         }
         ranges = new int[threads][2];
         threshold = CHARACTERS.length / threads;
+        arr = new int[threads];
         executorService = Executors.newFixedThreadPool(threads);
     }
 
@@ -116,9 +117,18 @@ public class MD5HashOperations implements HashOperations {
             ranges[rangeCounter][1] = end;
             rangeCounter++;
         } else {
-            final int middle = start + ((end - start) / 2);
-            fillRanges(start, middle);
-            fillRanges(middle, end);
-        }
+            if (arr[0] == 0) {
+                for (int i = 0; i <= CHARACTERS.length - 3; i++) {
+                    int j = i;
+                    if (j >= threads ) {
+                        j = j - threads;
+                    }
+                    arr[j] = 1 + arr[j];
+                }
+            }
+                final int middle = start + arr[rangeCounter];
+                fillRanges(start, middle);
+                fillRanges(middle, end);
+            }
     }
 }
