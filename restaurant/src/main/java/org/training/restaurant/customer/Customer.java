@@ -2,6 +2,7 @@ package org.training.restaurant.customer;
 
 public interface Customer {
 
-    String name ();
-    void happiness ();
+    String getName ();
+    int getHappiness();
+//    Products createOrder(String p);
 }

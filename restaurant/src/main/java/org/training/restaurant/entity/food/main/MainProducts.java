@@ -1,7 +1,6 @@
-package org.training.restaurant.restaurant.food.main;
+package org.training.restaurant.entity.food.main;
 
-import org.training.restaurant.restaurant.food.main.products.Chips;
-import org.training.restaurant.restaurant.food.main.products.HotDog;
+import org.training.restaurant.entity.food.Products;
 
 import java.util.ArrayList;
 
@@ -12,11 +11,11 @@ public class MainProducts {
     Products chips = new Chips();
 
     public String getHotDog() {
-        return hotDog.product();
+        return hotDog.effect();
     }
 
     public String getChips() {
-        return chips.product();
+        return chips.effect();
     }
 
     public ArrayList<String> getAll() {

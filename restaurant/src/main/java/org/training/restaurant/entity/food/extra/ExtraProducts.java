@@ -1,4 +1,4 @@
-package org.training.restaurant.restaurant.food.extra;
+package org.training.restaurant.entity.food.extra;
 
 
 public class ExtraProducts {
