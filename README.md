@@ -1,4 +1,4 @@
-#Resolved Tasks
+# Resolved Tasks
 Some completed here, some in another project and copied here for more comfortable see it
 - [Resolved Tasks](##resolved-tasks)
     - [Calculator](#calculator)
@@ -11,12 +11,10 @@ Some completed here, some in another project and copied here for more comfortabl
       
 ---
 
-##Calculator
+## Calculator
 Here I've created realization for **Math Calculator** and **Hash Calculator**
 
----
-
-###Math Calculator
+### Math Calculator
 In Math Calculator you can input any line with math operations and get output with the correct answer.
 
 To run this program you need to run `MathRunner.java`. 
@@ -31,7 +29,7 @@ Here is an example of code work:
 
 ---
 
-###Hash Calculator
+### Hash Calculator
 In Hash Calculator you can encode any `md5` strings and decode low case `md5` stings.
 Decode implemented with Threads. This code doesn't have a dump for any hash results, every time when you start decode string, the program brute force all possible combinations of low case English letters from `a` to infinity.
 
@@ -60,7 +58,7 @@ decode 4fd0101ea3d0f5abbe296ef97f47afec
 
 ---
 
-##Circular Buffer
+## Circular Buffer
 This is my realisation for **Circular Buffer**. This buffer can contain any objects and have fixed-size buffer as if it were connected end-to-end. This structure lends itself easily to buffering data streams.
 
 For create new Circular Buffer input (where `10` is length of buffer):
@@ -68,7 +66,7 @@ For create new Circular Buffer input (where `10` is length of buffer):
  CircularBuffer<String> circularBuffer2 = new CircularBuffer<>(10);
 ```
 ---
-##Hospital
+## Hospital
 This is my realisation for this test Task:
 
 The responsibility of the Quarantine object is to simulate diseases on a group of patients.
